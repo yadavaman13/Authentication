@@ -13,6 +13,12 @@ router.post('/register', authController.registerUser);
  */
 router.get('/get-me', authController.getme);
 
+/**
+ * GET /api/auth/refresh-token
+ */
+router.get('/refresh-token', authController.refreshToken);
+
+
 router.get('/test', (req,res) => {
     console.log("Cookie:", req.cookies);
 
