@@ -2,7 +2,8 @@ const userModel = require("../models/user.model");
 const sessionModel = require("../models/session.model");
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 
 async function registerUser(req,res){
@@ -39,9 +40,9 @@ async function registerUser(req,res){
         maxAge: 7 * 24 * 60 * 60 * 1000   //7 days
     })
 
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10)
+    const hashedRefreshToken = crypto.createHash("sha256").update(refreshToken).digest("hex");
 
-    const sessions = await sessionModel.create({
+    const session = await sessionModel.create({
         user: user._id,
         hashedRefreshToken,
         ip: req.ip,
@@ -50,7 +51,7 @@ async function registerUser(req,res){
 
     const accessToken = jwt.sign({
         id: user._id,
-        sessionId: sessions._id
+        sessionId: session._id
     }, config.JWT_SECRET,{
         expiresIn: "15m"
     });
@@ -58,8 +59,10 @@ async function registerUser(req,res){
 
     res.status(201).json({
         message: "User registered successfully",
-        username,
-        email,
+        user:{
+            username,
+            email
+        },
         accessToken
     });
 }
@@ -91,12 +94,25 @@ async function refreshToken(req, res){
     const refreshToken = req.cookies.refreshToken;
 
     if(!refreshToken){
-        res.status(401).json({
+        return res.status(401).json({
             message: "token is required"
         })
     }
 
-    const decoded = jwt.verify(refreshToken, config.JWT_SECRET)
+    const hashedRefreshToken = crypto.createHash("sha256").update(refreshToken).digest("hex");
+
+    const session = await sessionModel.findOne({
+        hashedRefreshToken,
+        revoked: false
+    })
+
+    if(!session){
+        return res.status(400).json({
+            message: "No session exists for this user"
+        })
+    }
+
+    const decoded = jwt.verify(refreshToken, config.JWT_SECRET);
 
     const accessToken = jwt.sign({
         id: decoded.id
@@ -110,13 +126,17 @@ async function refreshToken(req, res){
         expiresIn: "7d"
     })
 
+    const hashedNewRefreshToken = crypto.createHash("sha256").update(newRefreshToken).digest("hex");
+
+    session.hashedRefreshToken = hashedNewRefreshToken,
+    await session.save()
+
     res.cookie("newRefreshToken", newRefreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000  //7 days
     })
-
 
     res.status(200).json({
         message: "new access token generated successfully!",
@@ -125,4 +145,34 @@ async function refreshToken(req, res){
     
 }
 
-module.exports = { registerUser, getme, refreshToken };
+async function logout(req, res){
+    const refreshToken = req.cookies.refreshToken;
+
+    if(!refreshToken){
+        return res.status(400).json({
+            message: "Invalid Refresh Token"
+        })
+    }
+
+    const hashedRefreshToken = crypto.createHash("sha256").update(refreshToken).digest("hex");
+
+    const session = await sessionModel.findOne({
+        hashedRefreshToken,
+        revoked: false
+    })
+
+    if(!session){
+        return res.status(400).json({
+            message: "No session exists"
+        })
+    }
+
+    session.revoked = true, 
+    await session.save()
+
+    res.status(200).json({
+        message: "success"
+    })
+}
+
+module.exports = { registerUser, getme, refreshToken, logout };

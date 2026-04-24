@@ -18,6 +18,10 @@ router.get('/get-me', authController.getme);
  */
 router.get('/refresh-token', authController.refreshToken);
 
+/**
+ * GET /api/auth/logout
+ */
+router.get('/logout', authController.logout);
 
 router.get('/test', (req,res) => {
     console.log("Cookie:", req.cookies);
