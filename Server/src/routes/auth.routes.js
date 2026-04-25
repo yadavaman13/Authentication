@@ -7,6 +7,10 @@ const authController = require("../controller/auth.controller");
  */
 router.post('/register', authController.registerUser);
 
+/**
+ * POST /api/auth/login
+ */
+router.post('/login', authController.login);
 
 /**
  * GET /api/auth/get-me
@@ -23,13 +27,16 @@ router.get('/refresh-token', authController.refreshToken);
  */
 router.get('/logout', authController.logout);
 
-router.get('/test', (req,res) => {
-    console.log("Cookie:", req.cookies);
+/**
+ * GET /api/auth/logout-all
+ */
+router.get('/logout-all', authController.logoutAll);
 
-    res.json({
-        message: "test successfull",
-        token: req.cookies
-    })
-})
+/**
+ * POST /api/auth/verify-email
+ */
+router.post('/verify-email', authController.verifyEmail);
+
+
 
 module.exports = router;
