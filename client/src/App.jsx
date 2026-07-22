@@ -1,9 +1,10 @@
 import React from 'react'
+import LoginPage from './pages/LoginPage'
 
 const App = () => {
   return (
-    <div>
-      <h1 className='text-3xl font-bold underline bg-indigo-500'>helloooo....</h1>
+    <div className='bg-[#0A0A0A] h-screen flex justify-center'>
+      <LoginPage />
     </div>
   )
 }
