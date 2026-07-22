@@ -1,11 +1,13 @@
 const userModel = require("../models/user.model");
 const sessionModel = require("../models/session.model");
 const otpModel = require("../models/otp.model");
+
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const sendEmail = require("../services/email.service");
+
+const sendEmail = require("../services/resend.service.js");
 const {generateOtp, getOtpHtml} = require("../utils/util");
 
 
@@ -22,7 +24,7 @@ async function registerUser(req, res){
         })
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcrypt.hash(password, 8)
 
     const user = await userModel.create({
         username,
