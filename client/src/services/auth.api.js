@@ -16,12 +16,13 @@ export async function register({username, email, password}){
         return response.data
     } catch(err){
         console.log('Register failed',err)
+        throw err.response?.data || err
     }
 }
 
 export async function login({email,password}){
     try{
-        const reponse = await authApiInstance.post('/login', {
+        const response = await authApiInstance.post('/login', {
             email,
             password
         })
@@ -29,6 +30,7 @@ export async function login({email,password}){
         return response.data
     } catch(err){
         console.log('Login failed',err)
+        throw err.response?.data || err
     }
 }
 
@@ -42,6 +44,7 @@ export async function verifyEmail({email, otp}){
         return response.data
     } catch(err){
         console.log('Error verifying email',err)
+        throw err.response?.data || err
     }
 }
 
@@ -51,6 +54,7 @@ export async function logout(){
         return response.data
     } catch(err){
         console.log('logout failed', err)
+        throw err.response?.data || err
     }
 }
 
@@ -60,6 +64,7 @@ export async function logoutAll(){
         return response.data
     } catch(err){
         console.log('Error logging out from all devices', err)
+        throw err.response?.data || err
     }
 }
 
@@ -69,6 +74,7 @@ export async function refreshToken(){
         return response.data
     } catch(err){
         console.log('Error generating refresh token', err)
+        throw err.response?.data || err
     }
 }
 
@@ -78,5 +84,6 @@ export async function getMe(){
         return response.data
     } catch(err){
         console.log('Error fetching the profile', err)
+        throw err.response?.data || err
     }
 }
