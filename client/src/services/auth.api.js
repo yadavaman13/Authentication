@@ -1,89 +1,21 @@
-import axios from 'axios';
+import axios from 'axios'
 
-export const authApiInstance = axios.create({
+const api = axios.create({
     baseURL: '/api/auth',
     withCredentials: true
 })
 
-export async function register({username, email, password}){
+export async function login({email, password}){
     try{
-        const response = await authApiInstance.post('/register', {
-            username,
+        const response = await api.post('/login',{
             email,
             password
         })
 
-        return response.data
+        return response.data;
     } catch(err){
-        console.log('Register failed',err)
+        console.log('error while logging In', err)
         throw err.response?.data || err
     }
 }
 
-export async function login({email,password}){
-    try{
-        const response = await authApiInstance.post('/login', {
-            email,
-            password
-        })
-
-        return response.data
-    } catch(err){
-        console.log('Login failed',err)
-        throw err.response?.data || err
-    }
-}
-
-export async function verifyEmail({email, otp}){
-    try{
-        const response = await authApiInstance.post('/verify-email', {
-            email,
-            otp
-        })
-
-        return response.data
-    } catch(err){
-        console.log('Error verifying email',err)
-        throw err.response?.data || err
-    }
-}
-
-export async function logout(){
-    try{
-        const response = await authApiInstance.get('/logout')
-        return response.data
-    } catch(err){
-        console.log('logout failed', err)
-        throw err.response?.data || err
-    }
-}
-
-export async function logoutAll(){
-    try{
-        const response = await authApiInstance.get('/logout-all')
-        return response.data
-    } catch(err){
-        console.log('Error logging out from all devices', err)
-        throw err.response?.data || err
-    }
-}
-
-export async function refreshToken(){
-    try{
-        const response = await authApiInstance.get('refresh-token')
-        return response.data
-    } catch(err){
-        console.log('Error generating refresh token', err)
-        throw err.response?.data || err
-    }
-}
-
-export async function getMe(){
-    try{
-        const response = await authApiInstance.get('/get-me')
-        return response.data
-    } catch(err){
-        console.log('Error fetching the profile', err)
-        throw err.response?.data || err
-    }
-}
