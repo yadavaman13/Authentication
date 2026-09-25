@@ -4,14 +4,14 @@ import { login, register } from '../services/auth.api';
 export function useAuth() {
     const { user, setUser, loading, setLoading, error, setError } = useAuthContext();
 
-    const handleLogin = async (email, password) => {
+    const handleLogin = async ({ email, password }) => {
         try {
             setLoading(true);
             setError(null);
 
-            const response = await login(email, password);
+            const response = await login({ email, password });
 
-            setUser(respone.user);
+            setUser(response.user);
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');
         } finally {
@@ -19,14 +19,14 @@ export function useAuth() {
         }
     };
 
-    const handleRegister = async (username, email, password) => {
+    const handleRegister = async ({ username, email, password }) => {
         try {
             setLoading(true);
             setError(null);
 
-            const response = await register(username, email, password);
+            const response = await register({ username, email, password });
 
-            setUser(respone.user);
+            setUser(response.user);
         } catch (err) {
             setError(err?.response?.data?.message || 'Registration Failed');
         } finally {
@@ -34,5 +34,5 @@ export function useAuth() {
         }
     };
 
-    return { loading, user, handleLogin, handleRegister };
+    return { loading, user, error, handleLogin, handleRegister };
 }

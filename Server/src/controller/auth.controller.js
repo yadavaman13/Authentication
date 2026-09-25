@@ -13,12 +13,18 @@ const crypto = require('crypto');
 async function registerUser(req, res) {
     const { username, email, password } = req.body;
 
+    if (!username || !email || !password) {
+        return res.status(400).json({
+            message: 'username, email, and password are required',
+        });
+    }
+
     const userAlreadyExists = await userModel.findOne({
         email,
     });
 
     if (userAlreadyExists) {
-        res.status(409).json({
+        return res.status(409).json({
             message: 'user with same email exists',
         });
     }
@@ -120,7 +126,7 @@ async function getme(req, res) {
     const token = req.headers.authorization?.split(' ')[1];
 
     if (!token) {
-        res.status(403).json({
+        return res.status(403).json({
             message: 'token is not valid',
         });
     }
