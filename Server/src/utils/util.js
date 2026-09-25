@@ -3,7 +3,6 @@ function generateOtp() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-
 //function for email html format to send otp
 function getOtpHtml(otp) {
     return `<!DOCTYPE html>
@@ -45,5 +44,4 @@ function getOtpHtml(otp) {
 </html>`;
 }
 
-
-module.exports = {generateOtp, getOtpHtml}
+module.exports = { generateOtp, getOtpHtml };

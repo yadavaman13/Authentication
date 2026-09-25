@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authController = require("../controller/auth.controller");
+const authController = require('../controller/auth.controller');
 
 /**
  * POST /api/auth/register
@@ -36,6 +36,5 @@ router.get('/logout-all', authController.logoutAll);
  * POST /api/auth/verify-email
  */
 router.post('/verify-email', authController.verifyEmail);
-
 
 module.exports = router;
