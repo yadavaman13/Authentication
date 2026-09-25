@@ -7,8 +7,8 @@ const config = require("../config/config");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
-const sendEmail = require("../services/resend.service.js");
-const {generateOtp, getOtpHtml} = require("../utils/util");
+// const sendEmail = require("../services/email.service");
+// const {generateOtp, getOtpHtml} = require("../utils/util");
 
 
 async function registerUser(req, res){
@@ -32,18 +32,18 @@ async function registerUser(req, res){
         password: hashedPassword
     })
 
-    const otp = generateOtp()
-    const html = getOtpHtml(otp)
+    // const otp = generateOtp()
+    // const html = getOtpHtml(otp)
 
-    const otpHash = await crypto.createHash("sha256").update(otp).digest("hex")
+    // const otpHash = await crypto.createHash("sha256").update(otp).digest("hex")
 
-    await otpModel.create({
-        email,
-        user: user._id,
-        otpHash
-    })
+    // await otpModel.create({
+    //     email,
+    //     user: user._id,
+    //     otpHash
+    // })
 
-    await sendEmail(email, "OTP Verification", `Your OTP Code is ${otp}`, html)
+    // await sendEmail(email, "OTP Verification", `Your OTP Code is ${otp}`, html)
 
     res.status(201).json({
         message: "User registered successfully",
