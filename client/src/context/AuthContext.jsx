@@ -7,8 +7,14 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const logout = () => {
+        setUser(null);
+    };
+
     return (
-        <AuthContext.Provider value={{ user, setUser, loading, setLoading, error, setError }}>
+        <AuthContext.Provider
+            value={{ user, setUser, loading, setLoading, error, setError, logout }}
+        >
             {children}
         </AuthContext.Provider>
     );

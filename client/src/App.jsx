@@ -14,45 +14,31 @@ const DashboardPage = () => {
     };
 
     return (
-        <div className="w-full max-w-md bg-neutral-900 border border-neutral-800 rounded-2xl p-8 shadow-2xl relative overflow-hidden text-center">
-            <div className="relative z-10 space-y-6">
-                <div className="w-20 h-20 bg-neutral-800 border border-neutral-700 rounded-full flex items-center justify-center mx-auto shadow-lg text-white font-bold text-3xl">
-                    {user?.username?.[0]?.toUpperCase() || 'U'}
-                </div>
-
-                <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-white">
-                        Welcome, {user?.username || 'Guest'}!
-                    </h1>
-                    <p className="text-neutral-400 text-sm mt-1">
-                        {user?.email || 'No email available'}
-                    </p>
-                </div>
-
-                <div className="p-4 bg-neutral-950 border border-neutral-850 rounded-xl text-left">
-                    <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1">
-                        Security Status
-                    </h2>
-                    <p className="text-neutral-200 text-sm flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-neutral-400"></span>
-                        Authenticated & Verified
-                    </p>
-                </div>
-
-                <button
-                    onClick={handleLogout}
-                    className="w-full bg-white hover:bg-neutral-200 text-black font-medium py-3 rounded-xl transition-all duration-300 transform active:scale-[0.98] focus:outline-none"
-                >
-                    Sign Out
-                </button>
+        <div className="w-full max-w-sm bg-neutral-900 border border-neutral-800 rounded-lg p-6 text-center">
+            <div className="w-14 h-14 bg-neutral-800 rounded-full flex items-center justify-center mx-auto text-white font-bold text-xl mb-4">
+                {user?.username?.[0]?.toUpperCase() || 'U'}
             </div>
+
+            <h1 className="text-xl font-semibold text-white">
+                Welcome, {user?.username || 'Guest'}
+            </h1>
+            <p className="text-neutral-400 text-sm mt-1 mb-6">
+                {user?.email || 'No email available'}
+            </p>
+
+            <button
+                onClick={handleLogout}
+                className="w-full bg-white hover:bg-neutral-200 text-black font-medium py-2 rounded text-sm cursor-pointer"
+            >
+                Sign Out
+            </button>
         </div>
     );
 };
 
 const App = () => {
     return (
-        <div className="bg-[#0A0A0A] min-h-screen w-full flex items-center justify-center font-sans text-white p-4 selection:bg-indigo-500 selection:text-white">
+        <div className="bg-black min-h-screen text-white flex items-center justify-center p-4">
             <Routes>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
